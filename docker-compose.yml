@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  tobii-ros:
+    container_name: tobii-ros
+    working_dir: /home/user/tobii-ros
+    build:
+      context: .
+      dockerfile: Dockerfile.tobii
+      network: host
+    network_mode: host
+    pid: host
+    ipc: host
+    tty: true
+    privileged: true
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ../tobii-ros:/home/user/tobii-ros
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev/bus/usb:/dev/bus/usb

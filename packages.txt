@@ -1,0 +1,15 @@
+software-properties-common
+apt-utils
+python3-pip
+git
+curl
+make 
+vim
+libpthread-stubs0-dev
+build-essential
+gconf2
+gconf-service
+libnotify4
+libappindicator1
+libxtst6
+libsqlcipher0
