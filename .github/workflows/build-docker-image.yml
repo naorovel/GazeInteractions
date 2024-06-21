@@ -51,15 +51,15 @@ jobs:
 
       # Build and push with docker-compose-actions-workflow instead: 
       # https://github.com/marketplace/actions/docker-compose-build-a-service-push-action
-      - name: Docker Compose Build A Service & Push Action
-        uses: 1-1is0/docker-compose-build-push@publish
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
         with: 
-          image: tobii-ros
+          image: ghcr.io/naorovel/tobii-ros
           registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
         
-      
-
-
+    
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       # - name: Build and push Docker image
