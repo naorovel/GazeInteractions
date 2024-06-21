@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          # tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           # context: .
           # context: "{{defaultContext}}"
           # push: ${{ github.event_name != 'pull_request' }} # Don't push on PR
