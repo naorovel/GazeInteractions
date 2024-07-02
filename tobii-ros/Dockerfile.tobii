@@ -45,6 +45,9 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 # eyetracker config file
 RUN cp /tobii/config.db /usr/share/tobii_engine/db/config.db
 
+# troubleshooting package install
+RUN sudo apt install usbutils
+
 # eyetracker start script
 # NOTE: if using dev containers, these two lines can be commented out to automatically start eye tracking.
 # however, it seems to break things if you use the standard docker exec.
