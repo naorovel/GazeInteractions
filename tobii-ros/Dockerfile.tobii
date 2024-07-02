@@ -48,6 +48,14 @@ RUN cp /tobii/config.db /usr/share/tobii_engine/db/config.db
 # troubleshooting package install
 RUN sudo apt install usbutils
 
+# installing python libraries
+RUN pip install uvicorn
+RUN pip install fastapi
+RUN pip install requests
+RUN pip install pytest
+RUN pip install pytest-asyncio
+
+
 # eyetracker start script
 # NOTE: if using dev containers, these two lines can be commented out to automatically start eye tracking.
 # however, it seems to break things if you use the standard docker exec.

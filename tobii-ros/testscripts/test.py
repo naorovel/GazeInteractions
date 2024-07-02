@@ -1,4 +1,6 @@
-from tobii_stream_engine import Api, Device, GazePoint, Stream
+
+from tobii_stream_engine import Api, Device, GazePoint, Stream, GazeOrigin, GazePoint, Stream, UserPresence, get_api_version
+
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
     print(f"{gaze_point=}")
