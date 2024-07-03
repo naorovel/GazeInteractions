@@ -8,7 +8,7 @@ RUN rm -rf /var/lib/apt/lists/* && apt-get clean
 RUN apt-get update && apt-get install -y \
     $(cat packages.txt)
 
-# python 3.10 setup for tobii python
+# python 3.10 setup for tobii python repo
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get install -y python3.10 python3.10-distutils python3.10-dev
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
@@ -59,3 +59,6 @@ RUN pip install Flask-SocketIO --ignore-installed
 
 # front-end dependencies
 FROM node:22.4.0
+WORKDIR /usr/app
+COPY ./ /usr/app
+RUN npm install
