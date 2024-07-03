@@ -54,10 +54,8 @@ RUN pip install fastapi
 RUN pip install requests
 RUN pip install pytest
 RUN pip install pytest-asyncio
+RUN pip install flask --ignore-installed
+RUN pip install Flask-SocketIO --ignore-installed
 
-
-# eyetracker start script
-# NOTE: if using dev containers, these two lines can be commented out to automatically start eye tracking.
-# however, it seems to break things if you use the standard docker exec.
-# COPY start_et.sh /
-# RUN echo "./start_et.sh" >> ~/.bashrc
+# front-end dependencies
+FROM node:22.4.0
