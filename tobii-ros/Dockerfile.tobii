@@ -56,9 +56,9 @@ RUN pip install pytest
 RUN pip install pytest-asyncio
 RUN pip install flask --ignore-installed
 RUN pip install Flask-SocketIO --ignore-installed
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+RUN sudo -E bash nodesource_setup.sh
+RUN apt install -y nodejs
 
-# front-end dependencies
-FROM node:22.4.0
-WORKDIR /usr/app
-COPY ./ /usr/app
-RUN npm install
+# installing python data processing libraries
+RUN pip install screeninfo

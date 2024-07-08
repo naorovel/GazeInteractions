@@ -1,6 +1,7 @@
 from tobii_stream_engine import Api, Device, GazePoint, EyePosition, Stream, GazeOrigin, GazePoint, Stream, UserPresence, get_api_version
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, emit
+from parse_tobii_api import coord_to_pixels
 
 tobiiAPI = Api(); 
 
@@ -33,7 +34,7 @@ def emit_data(data: any):
 
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
-    emit_data({"gaze_point": gaze_point, "timestamp": timestamp})
+    emit_data({"gaze_point": coord_to_pixels(gaze_point), "timestamp": timestamp})
     return gaze_point
 
 def on_gaze_origin(timestamp: int, gaze_origin: GazeOrigin) -> None:
@@ -51,7 +52,7 @@ def on_user_presence(timestamp: int, user_presence: UserPresence) -> None:
 device_urls = tobiiAPI.enumerate_local_device_urls()
 
 if not len(device_urls):
-    print("no device found") 
+    print("No device found") 
     Exception(ValueError) # Change error type here to be more descriptive - no device found
 
 device = Device(api=tobiiAPI, url=device_urls[0])
