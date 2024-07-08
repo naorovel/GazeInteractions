@@ -2,12 +2,17 @@ from tobii_stream_engine import Api, Device, GazePoint, EyePosition, Stream, Gaz
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, emit
 from parse_tobii_api import coord_to_pixels
+import os
+from flask import Flask, render_template, request, url_for, jsonify, session
+import json
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 
 tobiiAPI = Api(); 
 
 app = Flask("GazeInteractions")
 async_mode = None
-socketio = SocketIO(app, async_mode=async_mode)
+socketio = SocketIO(app, async_mode=async_mode, path='/websocket', cors_allowed_origins="*")
 
 gaze_point: GazePoint = None
 gaze_origin: GazeOrigin = None
@@ -26,6 +31,7 @@ prev_data: dict = {
 def index():
   return render_template('index.html', async_mode=socketio.async_mode)
 
+""""""
 def emit_data(data: any):
     global prev_data
     prev_data.update(data)
@@ -34,7 +40,7 @@ def emit_data(data: any):
 
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
-    emit_data({"gaze_point": coord_to_pixels(gaze_point), "timestamp": timestamp})
+    emit_data({"gaze_point_screen": coord_to_pixels(gaze_point), "timestamp": timestamp})
     return gaze_point
 
 def on_gaze_origin(timestamp: int, gaze_origin: GazeOrigin) -> None:
@@ -73,6 +79,11 @@ if Stream.USER_PRESENCE in supported_streams:
     device.subscribe_user_presence(callback=on_user_presence)
 
 device.run()
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def index(path):
+    return render_template("../gaze-interactions/index.html")
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

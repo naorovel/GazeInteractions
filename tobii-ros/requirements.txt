@@ -1,0 +1,7 @@
+fastapi==0.111.0
+Flask==1.0.2
+Flask_Cors==3.0.8
+Flask_SocketIO==5.3.6
+httpx==0.27.0
+pytest==8.2.2
+screeninfo==0.8.1
