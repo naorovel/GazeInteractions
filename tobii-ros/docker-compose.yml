@@ -18,3 +18,6 @@ services:
       - ../tobii-ros:/home/user/tobii-ros
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev/bus/usb:/dev/bus/usb
+    ports:
+      - '8000:8000'
+

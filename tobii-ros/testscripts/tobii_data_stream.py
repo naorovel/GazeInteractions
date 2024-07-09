@@ -1,7 +1,7 @@
 from tobii_stream_engine import Api, Device, GazePoint, EyePosition, Stream, GazeOrigin, GazePoint, Stream, UserPresence, get_api_version
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO, emit
-from parse_tobii_api import coord_to_pixels
+from parse_tobii_api import coord_to_pixels, ScreenCoordinate
 import os
 from flask import Flask, render_template, request, url_for, jsonify, session
 import json
@@ -10,7 +10,7 @@ from flask_socketio import SocketIO, emit
 
 tobiiAPI = Api(); 
 
-app = Flask("GazeInteractions")
+app = Flask(__name__, static_folder="dist/static", template_folder="dist", static_url_path="/static")
 async_mode = None
 socketio = SocketIO(app, async_mode=async_mode, path='/websocket', cors_allowed_origins="*")
 
@@ -27,32 +27,40 @@ prev_data: dict = {
     "user_presence": user_presence
 }
 
+prev_gaze_point = []
+
 @app.route('/')
 def index():
   return render_template('index.html', async_mode=socketio.async_mode)
 
-""""""
 def emit_data(data: any):
     global prev_data
     prev_data.update(data)
     socketio.emit("update", data)
     print(prev_data)
+    return
 
+def emit_gaze_point(data: ScreenCoordinate): 
+    global prev_gaze_point
+    prev_gaze_point.append(data)
+    print(data)
+    return data
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
-    emit_data({"gaze_point_screen": coord_to_pixels(gaze_point), "timestamp": timestamp})
+    # emit_data({"gaze_point_screen": coord_to_pixels(gaze_point), "timestamp": timestamp})
+    emit_gaze_point(coord_to_pixels(gaze_point))
     return gaze_point
 
 def on_gaze_origin(timestamp: int, gaze_origin: GazeOrigin) -> None:
-    emit_data({"gaze_origin": gaze_origin, "timestamp": timestamp})
+    # emit_data({"gaze_origin": gaze_origin, "timestamp": timestamp})
     return gaze_origin
 
 def on_eye_position(timestamp: int, eye_position: EyePosition) -> None:
-    emit_data({"eye_position": eye_position, "timestamp": timestamp})
+    # emit_data({"eye_position": eye_position, "timestamp": timestamp})
     return eye_position
 
 def on_user_presence(timestamp: int, user_presence: UserPresence) -> None:
-    emit_data({"user_presence": user_presence, "timestamp": timestamp})
+    # emit_data({"user_presence": user_presence, "timestamp": timestamp})
     return user_presence
 
 device_urls = tobiiAPI.enumerate_local_device_urls()
@@ -79,11 +87,6 @@ if Stream.USER_PRESENCE in supported_streams:
     device.subscribe_user_presence(callback=on_user_presence)
 
 device.run()
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def index(path):
-    return render_template("../gaze-interactions/index.html")
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
