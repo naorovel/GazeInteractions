@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, url_for, jsonify, session
 import json
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from visualization import HeatmapVisualizer
 
 tobiiAPI = Api(); 
 
@@ -29,6 +30,8 @@ prev_data: dict = {
 
 prev_gaze_point = []
 
+heatmap = HeatmapVisualizer()
+
 @app.route('/')
 def index():
   return render_template('index.html', async_mode=socketio.async_mode)
@@ -43,12 +46,13 @@ def emit_data(data: any):
 def emit_gaze_point(data: ScreenCoordinate): 
     global prev_gaze_point
     prev_gaze_point.append(data)
-    print(data)
+    # print(data)
     return data
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
     # emit_data({"gaze_point_screen": coord_to_pixels(gaze_point), "timestamp": timestamp})
     emit_gaze_point(coord_to_pixels(gaze_point))
+    heatmap.redraw_heatmap(coord_to_pixels(gaze_point))
     return gaze_point
 
 def on_gaze_origin(timestamp: int, gaze_origin: GazeOrigin) -> None:

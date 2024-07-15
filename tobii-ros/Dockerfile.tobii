@@ -65,3 +65,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
 RUN sudo -E bash nodesource_setup.sh
 RUN apt install -y nodejs
 RUN npm install
+
+# Visualization dependecies
+RUN sudo apt-get install python3.10-tk
