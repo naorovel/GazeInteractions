@@ -48,7 +48,6 @@ def emit_data(data: any):
 def emit_gaze_point(data: ScreenCoordinate): 
     global prev_gaze_point
     prev_gaze_point.append(data)
-    # print(data)
     return data
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
