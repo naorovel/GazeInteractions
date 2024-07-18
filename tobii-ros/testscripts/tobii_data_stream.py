@@ -8,6 +8,7 @@ import json
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from visualization import HeatmapVisualizer
+from eye_mouse_control import move_mouse
 
 tobiiAPI = Api(); 
 
@@ -30,8 +31,8 @@ prev_data: dict = {
 
 prev_gaze_point = []
 
-heatmap = HeatmapVisualizer()
-heatmap.init_heatmap()
+# heatmap = HeatmapVisualizer()
+# heatmap.init_heatmap()
 
 @app.route('/')
 def index():
@@ -52,9 +53,11 @@ def emit_gaze_point(data: ScreenCoordinate):
 
 def on_gaze_point(timestamp: int, gaze_point: GazePoint) -> None:
     # emit_data({"gaze_point_screen": coord_to_pixels(gaze_point), "timestamp": timestamp})
+    # print(gaze_point)
     emit_gaze_point(coord_to_pixels(gaze_point))
+    move_mouse(timestamp, coord_to_pixels(gaze_point).x, coord_to_pixels(gaze_point).y)
     # heatmap.redraw_scatterplot(coord_to_pixels(gaze_point))
-    heatmap.draw_heatmap(coord_to_pixels(gaze_point))
+    # heatmap.draw_heatmap(coord_to_pixels(gaze_point))
     return gaze_point
 
 def on_gaze_origin(timestamp: int, gaze_origin: GazeOrigin) -> None:
