@@ -68,3 +68,4 @@ RUN npm install
 
 # Visualization dependecies
 RUN sudo apt-get install python3.10-tk
+
