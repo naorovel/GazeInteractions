@@ -68,4 +68,7 @@ RUN npm install
 
 # Visualization dependecies
 RUN sudo apt-get install python3.10-tk
-
+RUN rm -r /usr/lib/python3/dist-packages/PyQt5-5.14.1.dist-info
+# RUN python3.10 -m pip install --force-reinstall --no-deps PyQt5==5.15.5
+RUN rm -r /usr/lib/python3/dist-packages/PyQt5
+RUN python3.10 -m pip install PyQt5==5.15.5
